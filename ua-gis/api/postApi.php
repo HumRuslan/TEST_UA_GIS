@@ -39,9 +39,14 @@
             if($model->validate()){
                 if($model->save()){
                     return $this->response('Data saved.', 200);
+                } else {
+                    return $this->response(["error" => "Saving error", 'error_description' => "Saving error"], 500);
                 }
             }
-            return $this->response("Saving error", 500);
+            if (session_status() != PHP_SESSION_ACTIVE){
+                session_start();
+            }
+            return $this->response(["error" => "Validate error", 'error_description' => $_SESSION['error'], 500);
         }
 
         public function updateAction()
