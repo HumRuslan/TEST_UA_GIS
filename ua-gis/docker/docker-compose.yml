@@ -1,0 +1,63 @@
+# Версия docker-compose
+version: '2'
+# Список наших сервисов (контейнеров)
+services:
+    nginx:
+# используем последний стабильный образ nginx
+        image: nginx:latest
+        container_name: nginx_ua_gis
+        # маршрутизируем порты
+        ports:
+            - "80:80"
+            - "443:443"
+# монтируем директории, слева директории на основной машине, справа - куда они монтируются в контейнере
+        volumes:
+            - ~/projects/ua-gis/dev/ua-gis/docker/hosts:/etc/nginx/conf.d
+            - ~/projects/ua-gis/dev/ua-gis:/var/www/html
+            - ~/projects/ua-gis/dev/ua-gis/docker/logs:/var/log/nginx
+# nginx должен общаться с php контейнером
+        links:
+            - php
+#        networks:
+#            - project
+    php:
+# у нас свой образ для PHP, указываем путь к нему и говорим что его надо собрать
+        build: ./php
+        links:
+            - mysql
+        container_name: php_ua_gis
+# монтируем директорию с проектами
+        volumes:
+            - ~/projects/ua-gis/dev/ua-gis:/var/www/html
+        links:
+            - db  
+#        networks:
+#            - project
+    db:
+        image: mysql
+        container_name: db_ua_gis
+        ports:
+            - "3309:3306"
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+#        networks:
+#            - project
+
+#    networks:
+#        project:
+#            driver: bridge
+
+#    mysql:
+#        image: mysql:8
+#        container_name: db_ua_gis
+#        command: --default-authentication-plugin=mysql_native_password
+#        ports:
+#            - "3308:3306"
+#        volumes:
+#            - ~/projects/ua-gis/dev/ua-gis/docker/mysql:/var/lib/mysql/data
+# задаем пароль для root пользователя
+#        environment:
+#            MYSQL_ROOT_USER: root
+#            MYSQL_ROOT_PASSWORD: root
