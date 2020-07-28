@@ -44,3 +44,4 @@ frontend:
     password: admin123
 
     password: ua-gis/backend/.htpasswd
+API: http://ua-gis/api/post
