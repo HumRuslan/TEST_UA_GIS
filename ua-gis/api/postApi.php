@@ -46,7 +46,7 @@
             if (session_status() != PHP_SESSION_ACTIVE){
                 session_start();
             }
-            return $this->response(["error" => "Validate error", 'error_description' => $_SESSION['error'], 500);
+            return $this->response(["error" => "Validate error", 'error_description' => $_SESSION['error']], 500);
         }
 
         public function updateAction()
