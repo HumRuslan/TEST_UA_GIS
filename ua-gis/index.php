@@ -3,12 +3,12 @@
     $requestUri=preg_split('/\/|\?/',$_SERVER["REQUEST_URI"]);
     $pathApi = $requestUri[1];
     $nameApi = $requestUri[2];
-    $actionApi
     $apiPath = $pathApi.'/' . $nameApi . 'Api.php';
     try
     {
         if (file_exists($apiPath)){
-            $Api = new $apiPath;
+            $apiName = $pathApi.'\\' . $nameApi . 'Api';
+            $api = new $apiName;
             echo $api->run();
         } else {
             throw new Exception ("API not found file name: $apiPath");

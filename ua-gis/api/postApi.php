@@ -4,7 +4,7 @@
     use\common\models\postModel;
     use\common\models\postViewModel;
 
-    class UsersApi extends Api
+    class postApi extends baseApi
     {
         public $apiName = 'post';
 
